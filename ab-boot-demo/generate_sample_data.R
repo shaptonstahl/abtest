@@ -13,7 +13,7 @@ data$cohort.a[1:n.a] <- rnorm(n.a, mean=mean.a)
 data$cohort.b[1:n.b] <- rnorm(n.b, mean=mean.b)
 
 write.table(data, 
-            file="~/Box Sync/work/R/ab-boot-demo/cohorts_a_and_b.txt",
+            file="~/github/abtest/ab-boot-demo/cohorts_a_and_b.txt",
             quote=FALSE,
             sep='\t',
             row.names=FALSE,
