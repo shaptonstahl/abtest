@@ -19,12 +19,9 @@ DifferenceOfMedians <- function(x, y, frac.dropped=.2, n.iter=1000, silent=FALSE
   }
   
   draws <- numeric(0)
-#  withProgress(message='Calculating', detail=paste('part 0 of', n.iter), value=0, max=n.iter, {
     for(i in 1:n.iter) {
-#      setProgress(i, detail=paste('part', i, 'of', n.iter))
       draws <- c(draws, OneDraw())
     }
-#  })
   
   if(!silent) {
     cat("Difference of Medians test via the bootstrap\n")

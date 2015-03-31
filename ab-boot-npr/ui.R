@@ -1,31 +1,7 @@
 library(shiny)
-library(RMySQL)
 
-# cohort.list <- sort(read.table("http://dev-shaptonstahl.npr.org/shiny-data/ab-cohorts.php")[,1])
-
-# initialize database connection
-mysql.driver <- dbDriver("MySQL")
-con <- dbConnect(mysql.driver, group="stage4-infinite")
-
-# initialize the cohort list
-cohort.sql <- "SELECT DISTINCT(ratings_cohort) FROM user_ratings ORDER BY ratings_cohort"
-rs <- dbSendQuery(con, cohort.sql)
-cohort.list.mysql <- fetch(rs, n=-1)
-if(0==ncol(cohort.list.mysql)) {
-  cohort.list <- ""
-} else {
-  cohort.list <- cohort.list.mysql[,1]
-}
-
-# initialize platform list
-platform.sql <- "SELECT DISTINCT(ratings_platform) FROM user_ratings ORDER BY ratings_platform"
-rs <- dbSendQuery(con, platform.sql)
-platform.list.mysql <- fetch(rs, n=-1)
-if(0==ncol(platform.list.mysql)) {
-  platform.list <- ""
-} else {
-  platform.list <- platform.list.mysql[,1]
-}
+cohort.list <- as.character(read.csv('http://dev-shaptonstahl.npr.org/shiny-data/ab-cohorts.csv')$cohort)
+platform.list <- as.character(read.csv('http://dev-shaptonstahl.npr.org/shiny-data/ab-platforms.csv')$platform)
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
@@ -42,10 +18,10 @@ shinyUI(fluidPage(
           tags$p(),
           selectInput("cohort1", "Choose a baseline cohort:",
                       choices=cohort.list,
-                      selected=cohort.list[1]),
+                      selected=ifelse(any(grepl('A', cohort.list)), 'A', cohort.list[1])),
           selectInput("cohort2", "Choose a comparison cohort:",
                       choices=cohort.list,
-                      selected=cohort.list[2]),
+                      selected=ifelse(any(grepl('B', cohort.list)), 'B', cohort.list[2])),
           dateRangeInput("start.end.dates",
                          label="Choose a date range:",
                          start=Sys.Date()-10),
